@@ -1,17 +1,22 @@
 defmodule Invert.MixProject do
   use Mix.Project
 
+  @source_url "https://github.com/faheetah/invert"
+  @version "0.1.0"
+
   def project do
     [
       app: :invert,
-      version: "0.1.0",
+      version: @version,
       elixir: "~> 1.11",
-      start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      description: "An inverted index cache built on top of ETS",
+      package: package(),
+      name: "Invert",
+      docs: docs()
     ]
   end
 
-  # Run "mix help compile.app" to learn about applications.
   def application do
     [
       extra_applications: [:logger],
@@ -19,11 +24,25 @@ defmodule Invert.MixProject do
     ]
   end
 
-  # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      # {:dep_from_hexpm, "~> 0.3.0"},
-      # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
+      {:ex_doc, "0.24.2", only: :docs}
+    ]
+  end
+
+  defp package do
+    [
+      maintainers: ["William Normand"],
+      licenses: ["MIT"],
+      links: %{"gitHub" => @source_url},
+      files: ~w(.formatter.exs mix.exs README.md CHANGELOG.md lib)
+    ]
+  end
+
+  defp docs do
+    [
+      main: "Invert",
+      source_ref: "v#{@version}",
     ]
   end
 end
