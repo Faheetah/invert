@@ -106,7 +106,6 @@ defmodule Invert.Server do
   end
 
   defp parse_item(value) do
-    IO.inspect value
     Regex.scan(~r/[a-zA-Z]+/, value)
     |> Enum.map(fn [i] -> i end)
     |> Enum.reject(&(&1 == "" || &1 == nil))
