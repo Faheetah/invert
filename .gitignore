@@ -28,3 +28,4 @@ invert-*.tar
 
 # Large ~60MB file of test data, generate with mix invert.generate_words 1000000
 test_data.txt
+test_data_words.txt
