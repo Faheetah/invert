@@ -26,6 +26,7 @@ defmodule Invert.MixProject do
   end
 
   defp elixirc_paths(:test), do: ["lib", "test/helpers"]
+  defp elixirc_paths(:dev), do: ["lib", "test/helpers"]
   defp elixirc_paths(_), do: ["lib"]
 
   defp deps do
