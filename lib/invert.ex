@@ -7,7 +7,6 @@ defmodule Invert do
 
   alias Invert.Cache
   alias Invert.Helpers
-  alias Invert.Server
 
   ## Public API
 
