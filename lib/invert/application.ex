@@ -6,7 +6,7 @@ defmodule Invert.Application do
   @impl true
   def start(_type, _args) do
     tables =
-      Application.get_env(:invert, Invert)
+      Application.get_env(:invert, Invert, [tables: []])
       |> Keyword.get(:tables)
 
     children = [
