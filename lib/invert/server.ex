@@ -23,6 +23,10 @@ defmodule Invert.Server do
 
   ## GenServer functions
 
+  def handle_call({:get_tables}, _from, state) do
+    {:reply, Keyword.get(state, :tables), state}
+  end
+
   def handle_call({:get, table, item}, _from, state) do
     {duration, results} =
       :timer.tc(fn ->

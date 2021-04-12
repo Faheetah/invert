@@ -10,6 +10,11 @@ defmodule Invert do
 
   ## Public API
 
+  # [{InvertTest, :name, [:name, :id]}]
+  def get_tables() do
+    GenServer.call(Invert.Server, {:get_tables}, 500)
+  end
+
   # Invert.delete(Ingredients.Food, :description, {"Green Tomatoes", ["Green Tomatoes", 1]})
   def delete(module, name, item) do
     table = Helpers.atom_from_module(module, name)
