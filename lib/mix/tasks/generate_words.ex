@@ -21,6 +21,7 @@ defmodule Mix.Tasks.Invert.GenerateWords do
           f
           |> String.split("\n")
           |> Enum.take_random(@words)
+        word_pool = ["invert"] ++ word_pool
         File.write("test_data_words.txt", Enum.join(word_pool, "\n"))
         List.to_tuple(word_pool)
       {:error, e} ->
