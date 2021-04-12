@@ -9,6 +9,7 @@ defmodule Invert.MixProject do
       app: :invert,
       version: @version,
       elixir: "~> 1.11",
+      elixirc_paths: elixirc_paths(Mix.env()),
       deps: deps(),
       description: "An inverted index cache built on top of ETS",
       package: package(),
@@ -23,6 +24,9 @@ defmodule Invert.MixProject do
       mod: {Invert.Application, []}
     ]
   end
+
+  defp elixirc_paths(:test), do: ["lib", "test/helpers"]
+  defp elixirc_paths(_), do: ["lib"]
 
   defp deps do
     [
