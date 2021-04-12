@@ -15,19 +15,19 @@ defmodule Invert do
     GenServer.call(Invert.Server, {:get_tables}, 500)
   end
 
-  # Invert.delete(Ingredients.Food, :description, {"Green Tomatoes", ["Green Tomatoes", 1]})
+  # Invert.delete(InvertTest, :name, {"invert", ["invert", 1]})
   def delete(module, name, item) do
     table = Helpers.atom_from_module(module, name)
     GenServer.call(Invert.Server, {:delete, table, item}, 500)
   end
 
-  # Invert.set(Ingredients.Food, :description, {"Green Tomatoes", ["Green Tomatoes", 1]})
+  # Invert.set(InvertTest, :name, {"invert", ["invert", 1]})
   def set(module, name, item) do
     table = Helpers.atom_from_module(module, name)
     GenServer.call(Invert.Server, {:set, table, item}, 500)
   end
 
-  # Invert.get(Ingredients.Food, :description, "green tomatoes")
+  # Invert.get(InvertTest, :name, "invert")
   def get(module, name, item) do
     call =
       try do
