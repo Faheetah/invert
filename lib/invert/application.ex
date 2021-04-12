@@ -6,7 +6,8 @@ defmodule Invert.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      {Invert.Cache, Application.get_env(:invert, :tables)}
+      {Invert.Cache, Application.get_env(:invert, :tables)},
+      {Invert.Server, Application.get_env(:invert, :tables)},
     ]
 
     opts = [strategy: :one_for_one, name: Invert.Supervisor]
