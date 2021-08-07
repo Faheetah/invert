@@ -33,7 +33,6 @@ defmodule InvertTest do
     results =
       Invert.get(InvertTest, :name, "beef jerky")
       |> then(fn {:ok, x} -> x end)
-      |> IO.inspect
 
     assert {["beef jerky", _], _} = hd(results)
   end

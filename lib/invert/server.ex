@@ -88,11 +88,10 @@ defmodule Invert.Server do
 
   defp filter_items(results, items) do
     results
-    |> Enum.dedup_by(&elem(&1, 1))
     |> Enum.group_by(&elem(&1, 1), &elem(&1, 0))
     |> Enum.map(fn {value, keywords} ->
-      diff = List.myers_difference(keywords, items)
-      score = length(Keyword.get(diff, :eq, [])) - (length(Keyword.get(diff, :ins, [])) / 4)
+      diff = List.myers_difference(Enum.dedup(keywords), items)
+      score = length(Keyword.get(diff, :eq, [])) - (length(Keyword.get(diff, :ins, [])) / 4) - (length(keywords) / 100)
       {value, score}
     end)
     |> Enum.sort_by(&elem(&1, 1), :desc)
