@@ -34,7 +34,8 @@ defmodule Invert.MixProject do
       {:telemetry, "~> 0.4"},
       {:inflex, "~> 2.1.0"},
       {:ex_doc, "0.24.2", only: :docs},
-      {:exprof, "~> 0.2.4"},
+      {:exprof, "~> 0.2.4", only: :dev},
+      {:benchee, "~> 1.0.0", runtime: false, only: :dev},
       {:mix_test_watch, "~> 1.0", runtime: false, only: :dev},
     ]
   end

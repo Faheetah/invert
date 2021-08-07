@@ -30,21 +30,15 @@ defmodule Invert.Server do
   def handle_call({:get, table, item}, _from, state) do
     {duration, results} =
       :timer.tc(fn ->
-        if Application.get_env(:invert, :profile, false) do
-          ExProf.start
-        end
         items = split_terms(item)
 
         found =
           items
-          |> Enum.map(fn item -> Cache.get(table, item) end)
-          |> hd
+          |> Enum.flat_map(fn item ->
+            Cache.get(table, item)
+          end)
           |> filter_items(items)
 
-        if Application.get_env(:invert, :profile, false) do
-          ExProf.stop
-          ExProf.analyze
-        end
         {:reply, found, state}
       end)
 
@@ -55,8 +49,13 @@ defmodule Invert.Server do
   def handle_call({:set, table, {indexed_item, items}}, _from, state) do
     unless indexed_item == nil || indexed_item == "" do
       parse_item(indexed_item)
-      |> Enum.each(fn i ->
-        Cache.insert(table, List.to_tuple([Inflex.singularize(String.downcase(i)) | items]))
+      |> Enum.each(fn item ->
+        term =
+          item
+          |> String.downcase()
+          |> Inflex.singularize()
+
+        Cache.insert(table, {term, items})
       end)
     end
 
@@ -90,23 +89,13 @@ defmodule Invert.Server do
   defp filter_items(results, items) do
     results
     |> Enum.dedup_by(&elem(&1, 1))
-    |> Enum.reduce(%{}, fn found_item, acc ->
-      name = parse_item_name(found_item)
-      length = Enum.count(items -- items -- name) + 1 / String.length(elem(found_item, 1))
-      Map.update(acc, found_item, length, &(&1 + length))
+    |> Enum.group_by(&elem(&1, 1), &elem(&1, 0))
+    |> Enum.map(fn {value, keywords} ->
+      diff = List.myers_difference(keywords, items)
+      score = length(Keyword.get(diff, :eq, [])) - (length(Keyword.get(diff, :ins, [])) / 4)
+      {value, score}
     end)
-    |> Enum.sort_by(fn {_, score} -> score end, :desc)
-  end
-
-  defp parse_item_name(item) do
-    Regex.scan(~r/[a-zA-Z]+/, elem(item, 1))
-    |> Enum.map(fn [i] -> i end)
-    |> Enum.reject(&(&1 == "" || &1 == nil))
-    |> Enum.map(&String.trim/1)
-    |> Enum.map(&String.downcase/1)
-    |> Enum.map(&Inflex.singularize/1)
-    |> Enum.reject(&(&1 == "" || &1 == nil))
-    |> Enum.sort()
+    |> Enum.sort_by(&elem(&1, 1), :desc)
   end
 
   defp parse_item(value) do
