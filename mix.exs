@@ -2,7 +2,7 @@ defmodule Invert.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/faheetah/invert"
-  @version "0.2.1"
+  @version "0.3.0"
 
   def project do
     [
