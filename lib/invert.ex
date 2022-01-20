@@ -28,6 +28,7 @@ defmodule Invert do
   end
 
   # Invert.get(InvertTest, :name, "invert")
+  # @todo this needs to not swallow GenServer.call
   def get(module, name, item) do
     call =
       try do
